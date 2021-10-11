@@ -21,6 +21,7 @@ Combining some features easy to use of Keras-Tensorflow, Pytorch, Caffe for trai
 		* [Check config file](#check-config-file)
 		* [Training](#training)
 		* [Testing](#testing)
+		* [Tensorboard](#tensorboard)
 	* [Customization](#customization) **(Within two steps)**
 		* [Data Loader](#data-loader)
 		* [Model](#model)
@@ -182,10 +183,13 @@ Combining some features easy to use of Keras-Tensorflow, Pytorch, Caffe for trai
 ```
 
 ### Training
-`python train.py -c /path/to/config/config.json`
+Run script `python train.py -c /path/to/config/config.json`
 
 ### Testing
-`python test.py -w /path/to/weights/weights.h5`
+Run script `python test.py -w /path/to/weights/weights.h5`
+
+### Tensorboard
+When finish training, run script `tensorboard --logdir /path/to/Saved/CatDog/log`, then you can open the link``` ``` in your browser to see the log  
 
 ## Customization
 **Customization in two Steps**  
