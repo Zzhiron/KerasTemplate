@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow.keras import optimizers
 
 import Model.loss as loss_module
-import Model.metrics as metrics_module
+import Model.metric as metrics_module
 import Model as model_module
 import DataLoader as data_loader_module
 

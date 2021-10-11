@@ -17,14 +17,12 @@
     },
     "model": {
         "type": "SimpleModel",
+        "show": true,
         "args": {
             "input_h" : 224,
             "input_w" : 224,
             "input_c" : 3,
             "num_classes" : 2
-        },
-        "model_config": {
-
         }
     },
     "optimizer": {

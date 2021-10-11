@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow.keras import optimizers
 
 import Model.loss as loss_module
-import Model.metrics as metrics_module
+import Model.metric as metrics_module
 import Model as model_module
 import DataLoader as data_loader_module
 from Trainer import Trainer 
@@ -51,7 +51,7 @@ def main(config):
 
 if __name__ == '__main__':
     args = argparse.ArgumentParser(description='KerasTemplate')
-    args.add_argument('-c', '--config', default="config.json", type=str,
+    args.add_argument('-c', '--config', default=None, type=str,
                       help='config file path (default: None)')
 
     config = ConfigParser.from_args(args)
