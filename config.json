@@ -1,0 +1,93 @@
+{
+    "name": "CatDog",
+    "gpu":{
+        "devices" : "0, 1",
+        "memory_limit" : true
+    },
+    "data_loader": {
+        "type": "CatDogDataLoader",
+        "args":{
+            "data_root_dir": "../Dataset/CatDog/train",
+            "validation_split": 0.2,
+            "dataset_cache_dir" : "../Dataset/CatDog/dataset_cache",
+            "cache_clean" : true,
+            "batch_size" : 32,
+            "shuffle": true 
+        }
+    },
+    "model": {
+        "type": "SimpleModel",
+        "args": {
+            "input_h" : 224,
+            "input_w" : 224,
+            "input_c" : 3,
+            "num_classes" : 2
+        },
+        "model_config": {
+
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args":{
+            "learning_rate" : 0.001,
+            "amsgrad": true
+        }
+    },
+    "loss": {
+        "type": "cce",
+        "args":{}
+    },
+    "metrics": [
+        "acc"
+    ],
+    "trainer": {
+        "pretrained_weights_path" : null,
+        "checkpoint" : null,
+        "epochs": 20,
+        "saved_dir": "../Saved",
+        "callbacks":[
+            {
+                "used" : true,
+                "type" : "reduce_lr",
+                "args" : {
+                    "monitor" : "loss",
+                    "factor" : 0.1,
+                    "patience" : 5,
+                    "verbose" : 1,
+                    "mode" : "auto",
+                    "min_delta" : 1e-4
+                }
+            },
+            {
+                "used" : true,
+                "type" : "early_stopping",
+                "args" : {
+                    "monitor" : "val_loss",
+                    "patience" : 6,
+                    "verbose" : 1,
+                    "mode" : "auto",
+                    "restore_best_weights" : true
+                }
+            },
+            {
+                "used" : true,
+                "type" : "model_checkpoint",
+                "args" : {
+                    "monitor" : "val_loss",
+                    "verbose" : 1,
+                    "save_best_only" : true,
+                    "save_weights_only" : true
+                }
+            },
+            {
+                "used" : true,
+                "type" : "tensorboard",
+                "args" : {
+                    "log_dir": null, 
+                    "histogram_freq": 1
+                }
+            }
+        ]
+    }  
+}
