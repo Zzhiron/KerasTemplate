@@ -189,7 +189,7 @@ Run script `python train.py -c /path/to/config/config.json`
 Run script `python test.py -w /path/to/weights/weights.h5`
 
 ### Tensorboard
-When finish training, run script `tensorboard --logdir /path/to/Saved/CatDog/log`, then you can open the link``` ``` in your browser to see the log  
+When finish training, run script `tensorboard --logdir /path/to/Saved/CatDog/log`, then you can open the link [http://localhost:6006/](http://localhost:6006/) in your browser to see the log  
 
 ## Customization
 **Customization in two Steps**  
