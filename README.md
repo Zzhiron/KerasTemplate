@@ -10,7 +10,7 @@ Combining some features easy to use of Keras-Tensorflow, Pytorch, Caffe for trai
 1. easy to customize and debug.  
 2. ops supported flexible with numpy.   
 ## Caffe
-1. Config.json is realy easy to use when to modified training configurations but don't want to change code.   
+1. Config.json is really easy to use when to modify training configurations but don't want to change code.   
 
 # KerasTemplate Project
 
@@ -19,14 +19,16 @@ Combining some features easy to use of Keras-Tensorflow, Pytorch, Caffe for trai
 	* [Folder Structure](#folder-structure)
 	* [Usage](#usage)
 		* [Check config file](#check-config-file)
-        	* [Training](#training)
-        	* [Testing](#testing)
-	* [Customization in two Steps](#customization-in-two-steps)
-		* [Implement in code](#implement-in-code)
-		* [Modify config json file](#modify-config-json-file)
+		* [Training](#training)
+		* [Testing](#testing)
+	* [Customization](#customization) **(Within two steps)**
+		* [Data Loader](#data-loader)
+		* [Model](#model)
+		* [Loss](#loss)
+		* [Metric](#metric)
+		* [Trainer](#trainer)
+		* [Callback](#callback)
 		* [Others](#others)
-            		add args
-            		change code
 	* [Reference](#reference)
 
 ## Environment recommended
@@ -179,61 +181,77 @@ Combining some features easy to use of Keras-Tensorflow, Pytorch, Caffe for trai
 }
 ```
 
-### training
+### Training
 `python train.py -c /path/to/config/config.json`
 
-### testing
+### Testing
 `python test.py -w /path/to/weights/weights.h5`
 
-## Customization in two Steps
-### Implement in code 
-* **Data Loader**
-* 1.inherit from ```BaseDataLoader```
-* 2.handle shuffling and validation split
-
-### Modify config json file
-* data loader
-* model 
-* loss
-* metric
-* trainer
-* callback
-
-### Others
-Threoretically, you can modified any thing you want, but known with how I thought may help.  
-* parameters, all params passed on by variable **config in code which is dictionary like
+## Customization
+**Customization in two Steps**  
+```0. Check examples I offered first if you get in trouble```  
+```1. Implement in code```  
+```2. Modify config json file```  
 
 ### Data Loader
-* **Writing your own data loader**
-1. **Inherit ```BaseDataLoader```**
-
-### Trainer
-* **Writing your own trainer**
-1. **Inherit ```BaseTrainer```**
-2. **Implementing abstract methods**
+* 0. ```BaseDataLoader``` handle the ```tf.data.Datasets```, batch size, cache and prefetch
+* 1. inherit ```BaseDataLoader```, handle shuffling and validation split yourself
+* 2. modify ```type``` and ```args``` in the part of data_loader in config.json
 
 ### Model
-* **Writing your own model**
-1. **Inherit `BaseModel`**
-2. **Implementing abstract methods**
+* 0. ```BaseModel``` handle the ```build_model```, that means compile model with loss, metric, and optimizer 
+* 1. inherit ```BaseModel```, which is subclass of ```tf.keras.models.Model```, implement the architecture of model yourself
+* 2. modify ```type``` and ```args``` in the part of model in config.json
 
 ### Loss
-Custom loss functions can be implemented in 'model/loss.py'. Use them by changing the name given in "loss" in config file, to corresponding name.
+* 1. implement the loss function yourself with inputs as ```(y_true, y_pred)```, or you can use the loss functions keras provided
+* 2. modify ```type``` and ```args``` in the part of loss in config.json
 
-### Metrics
+### Metric
+* 1. implement the metric function yourself with inputs as ```(y_true, y_pred)```, or you can use the metric functions keras provided
+* 2. add the function name in the metric list in the part of metric in config.json
 
-<!-- ## TODOs
+### Trainer
+* 0. ```BaseTrainer``` handle the ```traning process and callback```, that means you can do something you want during the training process 
+* 1. inherit ```BaseTrainer```, implement the logic you want during the training process, you can also implement the training process from scratch without using ```fit()``` method keras provided
+* 2. modify ```type``` and ```args``` in the part of trainer in config.json
 
-- [ ] Multiple optimizers
-- [ ] Support more tensorboard functions
-- [x] Using fixed random seed
-- [x] Support Keras native tensorboard
-- [x] `tensorboardX` logger support
-- [x] Configurable logging layout, checkpoint naming
-- [x] Iteration-based training (instead of epoch-based)
-- [x] Adding command line option for fine-tuning -->
+### Callback
+* 1. implement the callback function yourself inherit ```tf.keras.callbacks.Callback```, return its name to function like I do
+* 2. add your callback into callback list in config.json as follows, then modify ```type``` and ```args``` in the part of your callback in config.json
+```javascript
+"callbacks":[                   
+            	{                               
+			"used" : true,              
+			"type" : "reduce_lr",       
+			"args" : {                  
+			    "monitor" : "loss",
+			    "factor" : 0.1,         
+			    "patience" : 5,
+			    "verbose" : 1,
+			    "mode" : "auto",
+			    "min_delta" : 1e-4
+			    }
+            	},
+------------------add your callback as follows-------------------
+		{
+			"used" : true,
+			"type" : "your_callback_function_name",
+			"args" : {}
+		}
+-----------------------------------------------------------------
+]
+```
+### Others
+Threoretically, you can modified any thing you want, but known with how I thought may help    
+* parameters, all params passed on by variable ```config``` in code which is dictionary like  
+* every sub module in ```config.json``` are dict like with ```type, args``` attribute, the former is module name,  the latter will be params passed the to module in code when use ```config.init_obj()``` method to initialize the module instance  
+
+## TODO
+- [ ] Customized Optimizers  
+- [ ] Support more tensorboard functions  
 
 # Reference
-* [KerasTemplate](https://github.com/victoresque/Keras-template)  
+* [PytorchTemplate](https://github.com/victoresque/Keras-template)  
 * [KerasTemplate](https://github.com/Ahmkel/Keras-Project-Template)  
 * [Tensorflow && Keras](https://tensorflow.google.cn/)  
