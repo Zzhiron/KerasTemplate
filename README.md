@@ -252,6 +252,7 @@ Threoretically, you can modified any thing you want, but known with how I though
 * every sub module in ```config.json``` are dict like with ```type, args``` attribute, the former is module name,  the latter will be params passed the to module in code when use ```config.init_obj()``` method to initialize the module instance  
 
 ## TODO
+- [ ] Chinese documentation 
 - [ ] Customized Optimizers  
 - [ ] Support more tensorboard functions  
 
